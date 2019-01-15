@@ -1,4 +1,4 @@
-package beat-utils
+package beat_utils
 
 func List2Set (ss []string) ( mm map[string]struct{}) {
     // converts lists to sort of sets
