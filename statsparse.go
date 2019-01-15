@@ -1,4 +1,4 @@
-package beat-utils
+package beat_utils
 // these functions parse Lustre stats records 
 
 import (
