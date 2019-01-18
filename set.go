@@ -1,6 +1,6 @@
 package beat_utils
 
-func List2Set (ss []string) ( mm map[string]struct{}) {
+func List2Set(ss []string) ( mm map[string]struct{}) {
     // converts lists to sort of sets
     // main use is to avoid having set literals in text configs
     
