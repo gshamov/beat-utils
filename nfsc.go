@@ -110,7 +110,48 @@ func GetNFSClientStats(s string) (result map[string]uint64, err error) {
 			result["v3.pathconf"] = atoi(line[22])
 			result["v3.commit"] = atoi(line[23])
 		case "proc4":
-
+			mylen := int( atoi(line[1]) )
+			if len(ll) != (mylen + 2) || mylen < 30{
+				// something wrong
+				// mylen should be 48 for proc4
+				// or at least 30
+				break
+			}
+		    result["v4.null"] = atoi(line[2])
+                    result["v4.read"] = atoi(line[3])
+                    result["v4.write"] = atoi(line[4])
+                    result["v4.commit"] = atoi(line[5])
+                    result["v4.open"] = atoi(line[6])
+                    result["v4.open_conf"] = atoi(line[7])
+                    result["v4.open_noat"] = atoi(line[8])
+                    result["v4.open_dgrd"] = atoi(line[9])
+                    result["v4.close"] = atoi(line[10])
+                    result["v4.setattr"] = atoi(line[11])
+                    result["v4.fsinfo"] = atoi(line[12])
+                    result["v4.renew"] = atoi(line[13])
+                    result["v4.setclntid"] = atoi(line[14])
+                    result["v4.confirm"] = atoi(line[15])
+                    result["v4.lock"] = atoi(line[16])
+                    result["v4.lockt"] = atoi(line[17])
+                    result["v4.locku"] = atoi(line[18])
+                    result["v4.access"] = atoi(line[19])
+                    result["v4.getattr"] = atoi(line[20])
+                    result["v4.lookup"] = atoi(line[21])
+                    result["v4.lookup_root"] = atoi(line[22])
+                    result["v4.remove"] = atoi(line[23])
+                    result["v4.rename"] = atoi(line[24])
+                    result["v4.link"] = atoi(line[25])
+                    result["v4.symlink"] = atoi(line[26])
+                    result["v4.create"] = atoi(line[27])
+                    result["v4.pathconf"] = atoi(line[28])
+                    result["v4.statfs"] = atoi(line[29])
+                    result["v4.readlink"] = atoi(line[30])
+		    result["v4.readdir"] = atoi(line[31])
+		    if mylen > 34 {
+			result["v4.getacl"] = atoi(line[35])
+			result["v4.setacl"] = atoi(line[36])
+		    }
+		    // do we need the rest of them?
 		default:
 			// NFS5?
 			break
