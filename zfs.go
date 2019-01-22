@@ -44,7 +44,7 @@ func GetZfsPoolIofile(s string) (result map[string]uint64, err error) {
 	//	fmt.Println("strange io file, len", len(bb))
 	//}
 	return result, err
-}
+} 
 
 func GetZfsStatfile(s string) (result map[string]uint64, err error) {
 	// reads one of ZFS stats files from kstats and returns everything as a map
@@ -68,7 +68,10 @@ func GetZfsStatfile(s string) (result map[string]uint64, err error) {
 			//only expecting name 4  value there, discarding the 4
 			break
 		}
-		v, _ := strconv.ParseUint(string(ll[2]), 10, 64) // are they always positive? I hope so that uint works
+		v, err := strconv.ParseUint(string(ll[2]), 10, 64) // are they always positive? I hope so that uint works; may be switch to float
+		if err != nil {
+				log.Fatal("Parse failure in zfs stats", err)
+			}
 		result[string(ll[0])] = v
 	}
 	return result, err
