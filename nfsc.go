@@ -15,11 +15,12 @@ import (
 License go here. The code will  more or less converted from python-Diamond 
 */
 
-const PROC := "/proc/net/rpc/nfs"
+
 
 func GetNFSClientStats(s string) (result map[string]uint64, err error) {
 	// Reads /proc/net/rpc/nfs and return 
-
+	s = "/proc/net/rpc/nfs"
+	
 	buf, err := ioutil.ReadFile(s)
 	if err != nil {
 		log.Fatal(err)
@@ -30,7 +31,7 @@ func GetNFSClientStats(s string) (result map[string]uint64, err error) {
 	bb := bytes.Split(buf, []byte("\n"))
 	
 	for n, line := range bb {
-		fmt.Println(n, string(line)
+		fmt.Println(n, string(line))
 	}
 			    
 	result = make(map[string]uint64)	
