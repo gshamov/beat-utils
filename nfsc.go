@@ -163,3 +163,159 @@ func GetNFSClientStats(s string) (result map[string]uint64, err error) {
 
 	return result, nil
 }
+
+func GetNFSClientStats1(s string) (result map[string]map[string]uint64, err error) {
+	// Reads /proc/net/rpc/nfs and returns map of maps, each inner map corresponds to a line
+	// this is to avoid dots in metric names?
+	
+	s = "/proc/net/rpc/nfs"
+
+	buf, err := ioutil.ReadFile(s)
+	if err != nil {
+		log.Fatal(err)
+	}
+	//fmt.Println(string(buf))
+
+	bb := bytes.Split(buf, []byte("\n"))
+
+	result = make(map[string]map[string]uint64)
+
+	for n, ll := range bb {
+		fmt.Println(n, string(ll))
+		line := bytes.Fields(ll)
+		if len(line) < 1 {
+			break
+		}
+		switch string(line[0]) {
+		case "net":
+			mnet := map[string]uint64 {
+			"packets": atoi(line[1]),
+			"udpcnt":  atoi(line[2]),
+			"tcpcnt":  atoi(line[3]),
+			"tcpconn":  atoi(line[4]),
+			}
+			result["net"] = mnet
+		case "rpc":
+			mrpc := map[string]uint64 {
+			"calls":  atoi(line[1]),
+			"retrans":  atoi(line[2]),
+			"authrefrsh":  atoi(line[3]),
+			}
+			result["rpc"] = mrpc
+			
+		case "proc2":
+			mylen := int(atoi(line[1]))
+			fmt.Println(string( line[0]), string(line[1]), mylen)
+			if ( len(line) != (mylen + 2) ) {
+				// something wrong
+				// mylen should be 18 for proc2
+				break
+			}
+			mproc2 := map[string]uint64 {
+			"null": atoi(line[2]),
+			"getattr": atoi(line[3]),
+			"setattr": atoi(line[4]),
+			"root": atoi(line[5]),
+			"lookup": atoi(line[6]),
+			"readlink": atoi(line[7]),
+			"read": atoi(line[8]),
+			"wrcache": atoi(line[9]),
+			"write": atoi(line[10]),
+			"create": atoi(line[11]),
+			"remove": atoi(line[12]),
+			"rename": atoi(line[13]),
+			"link": atoi(line[14]),
+			"symlink": atoi(line[15]),
+			"mkdir": atoi(line[16]),
+			"rmdir": atoi(line[17]),
+			"readdir": atoi(line[18]),
+			"fsstat": atoi(line[19]),
+			}
+			result["v2"] = mproc2
+		case "proc3":
+			mylen := int( atoi(line[1]) )
+			fmt.Println(string(line[0]), string(line[1]), mylen)
+			if len(line) != (mylen + 2) {
+				// something wrong
+				// mylen should be 22 for proc3
+				break
+			}
+			mproc3 := map[string]uint64 {
+			"null": atoi(line[2]),
+			"getattr": atoi(line[3]),
+			"setattr": atoi(line[4]),
+			"lookup": atoi(line[5]),
+			"access": atoi(line[6]),
+			"readlink": atoi(line[7]),
+			"read": atoi(line[8]),
+			"write": atoi(line[9]),
+			"create": atoi(line[10]),
+			"mkdir": atoi(line[11]),
+			"symlink": atoi(line[12]),
+			"mknod": atoi(line[13]),
+			"remove": atoi(line[14]),
+			"rmdir": atoi(line[15]),
+			"rename": atoi(line[16]),
+			"link": atoi(line[17]),
+			"readdir": atoi(line[18]),
+			"readdirplus": atoi(line[19]),
+			"fsstat": atoi(line[20]),
+			"fsinfo": atoi(line[21]),
+			"pathconf": atoi(line[22]),
+			"commit": atoi(line[23]),
+			}
+			result["v3"] = mproc3
+		case "proc4":
+			mylen := int( atoi(line[1]) )
+			fmt.Println(string(line[0]), string(line[1]), mylen)
+			if len(ll) != (mylen + 2) {
+				// something wrong
+				// mylen should be 48 for proc4
+				// or at least 30
+				break
+			}
+			mproc4 := map[string]uint64{
+		    "null": atoi(line[2]),
+                    "read": atoi(line[3]),
+                    "write": atoi(line[4]),
+                    "commit": atoi(line[5]),
+                    "open": atoi(line[6]),
+                    "open_conf": atoi(line[7]),
+                    "open_noat": atoi(line[8]),
+                    "open_dgrd": atoi(line[9]),
+                    "close": atoi(line[10]),
+                    "setattr": atoi(line[11]),
+                    "fsinfo": atoi(line[12]),
+                    "renew": atoi(line[13]),
+                    "setclntid": atoi(line[14]),
+                    "confirm": atoi(line[15]),
+                    "lock": atoi(line[16]),
+                    "lockt": atoi(line[17]),
+                    "locku": atoi(line[18]),
+                    "access": atoi(line[19]),
+                    "getattr": atoi(line[20]),
+                    "lookup": atoi(line[21]),
+                    "lookup_root": atoi(line[22]),
+                    "remove": atoi(line[23]),
+                    "rename": atoi(line[24]),
+                    "link": atoi(line[25]),
+                    "symlink": atoi(line[26]),
+                    "create": atoi(line[27]),
+                    "pathconf": atoi(line[28]),
+                    "statfs": atoi(line[29]),
+                    "readlink": atoi(line[30]),
+		    "readdir": atoi(line[31]),
+		    //if mylen > 34 {
+			"getacl": atoi(line[35]),
+			"setacl": atoi(line[36]),
+		    // do we need the rest of them?
+		    }
+		    result["v4"] = mproc4
+		default:
+			// NFSv5???
+			break
+		}
+	}
+
+	return result, nil
+}
