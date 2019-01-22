@@ -30,11 +30,39 @@ func GetNFSClientStats(s string) (result map[string]uint64, err error) {
 	// using splits for just two lines?
 	bb := bytes.Split(buf, []byte("\n"))
 	
+	result = make(map[string]string)
+	
 	for n, line := range bb {
 		fmt.Println(n, string(line))
+		ll = bytes.Fields(line)
+		if len (ll) < 1 {
+			cycle
+		}
+		switch ll[0] {
+		case 'net' :
+			results['net.packets'] = line[1]
+                    results['net.udpcnt'] = line[2]
+                    results['net.tcpcnt'] = line[3]
+			results['net.tcpconn'] = line[4]
+		case 'rpc' :           
+                    results['rpc.calls'] = line[1]
+                    results['rpc.retrans'] = line[2]
+			results['rpc.authrefrsh'] = line[3]
+		case 'proc2' :
+			mylen, err = strconv.AtoI( ll[1] )
+						  if len(ll) != (mylen + 2) {
+						  	// something wrong
+						  }
+		case 'proc3' :
+		case 'proc4' :
+		case default :
+			// NFS5?
+			cycle
+		}
 	}
+	
 			    
-	result = make(map[string]uint64)	
+		
 			    
 	/*if len(bb) > 2 {
 		line := bytes.Fields(bb[1])
