@@ -3,11 +3,11 @@ package beat_utils
 import (
 	//"bufio"
 	"bytes"
-	//"fmt"
+	"fmt"
 	"io/ioutil"
 	"log" // how do I do logging from beats? May be their logp?
 	//"path/filepath"
-	"strconv"
+	//"strconv"
 	//"strings"
 )
 
