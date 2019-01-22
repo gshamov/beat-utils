@@ -56,7 +56,8 @@ func GetNFSClientStats(s string) (result map[string]uint64, err error) {
 			result["rpc.authrefrsh"] = atoi(line[3])
 		case "proc2":
 			mylen := int(atoi(line[1]))
-			if ( len(ll) != (mylen + 2) ) || (mylen != 18) {
+			fmt.Println(string( line[0]), string(line[1]), mylen)
+			if ( len(line) != (mylen + 2) ) {
 				// something wrong
 				// mylen should be 18 for proc2
 				break
@@ -82,7 +83,8 @@ func GetNFSClientStats(s string) (result map[string]uint64, err error) {
 
 		case "proc3":
 			mylen := int( atoi(line[1]) )
-			if len(ll) != (mylen + 2) {
+			fmt.Println(string(line[0]), string(line[1]), mylen)
+			if len(line) != (mylen + 2) {
 				// something wrong
 				// mylen should be 22 for proc3
 				break
@@ -111,12 +113,13 @@ func GetNFSClientStats(s string) (result map[string]uint64, err error) {
 			result["v3.commit"] = atoi(line[23])
 		case "proc4":
 			mylen := int( atoi(line[1]) )
-			if len(ll) != (mylen + 2) || mylen < 30{
+			fmt.Println(string(line[0]), string(line[1]), mylen)
+/*			if len(ll) != (mylen + 2) {
 				// something wrong
 				// mylen should be 48 for proc4
 				// or at least 30
 				break
-			}
+			} */
 		    result["v4.null"] = atoi(line[2])
                     result["v4.read"] = atoi(line[3])
                     result["v4.write"] = atoi(line[4])
@@ -158,25 +161,5 @@ func GetNFSClientStats(s string) (result map[string]uint64, err error) {
 		}
 	}
 
-	/*if len(bb) > 2 {
-		line := bytes.Fields(bb[1])
-		svals := bytes.Fields(bb[2])
-		l := len(keys)
-		if len(svals) != l {
-			log.Fatal("Number of fields mismatch", keys, svals)
-		}
-		result = make(map[string]uint64)
-		for i, k := range keys {
-			v, err := strconv.ParseUint(string(svals[i]), 10, 64)
-			if err != nil {
-				log.Fatal("Parse failure in zfs io", err)
-			}
-			result[string(k)] = v
-		}
-		fmt.Println(result)
-	} else {
-		log.Fatal("strange io file, len", len(bb))
-	}
-	*/
 	return result, nil
 }
