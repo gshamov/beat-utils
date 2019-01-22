@@ -15,7 +15,7 @@ import (
 License go here. The code will  more or less converted from python-Diamond 
 */
 
-PROC = '/proc/net/rpc/nfs'
+const PROC := "/proc/net/rpc/nfs"
 
 func GetNFSClientStats(s string) (result map[string]uint64, err error) {
 	// Reads /proc/net/rpc/nfs and return 
@@ -29,10 +29,12 @@ func GetNFSClientStats(s string) (result map[string]uint64, err error) {
 	// using splits for just two lines?
 	bb := bytes.Split(buf, []byte("\n"))
 	
-	for n, line := bb {
+	for n, line := range bb {
 		fmt.Println(n, string(line)
 	}
-	result = make(map[string]uint64)		    
+			    
+	result = make(map[string]uint64)	
+			    
 	/*if len(bb) > 2 {
 		line := bytes.Fields(bb[1])
 		svals := bytes.Fields(bb[2])
