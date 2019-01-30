@@ -266,14 +266,14 @@ func GetNFSClientStats1(s string) (result map[string]map[string]uint64, err erro
 			}
 			result["v3"] = mproc3
 		case "proc4":
-			mylen := int( atoi(line[1]) )
-			fmt.Println(string(line[0]), string(line[1]), mylen)
-			//if len(ll) != (mylen + 2) {
+			//mylen := int( atoi(line[1]) )
+			//fmt.Println(string(line[0]), string(line[1]), mylen)
+			if len(ll) < 38  {
 				// something wrong
 				// mylen should be 48 for proc4
 				// or at least 30
-			//	break
-			//}
+				break
+			}
 			mproc4 := map[string]uint64{
 		    "null": atoi(line[2]),
                     "read": atoi(line[3]),
@@ -305,9 +305,9 @@ func GetNFSClientStats1(s string) (result map[string]map[string]uint64, err erro
                     "statfs": atoi(line[29]),
                     "readlink": atoi(line[30]),
 		    "readdir": atoi(line[31]),
-		    //if mylen > 34 {
-			"getacl": atoi(line[35]),
-			"setacl": atoi(line[36]),
+		    "getacl": atoi(line[35]),
+		    "setacl": atoi(line[36]),
+
 		    // do we need the rest of them?
 		    }
 		    result["v4"] = mproc4
