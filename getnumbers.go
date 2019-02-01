@@ -34,6 +34,27 @@ func GetNumberVal(s string) (v uint64, ok bool) {
 	return v, ok
 }
 
+func GetStringVal(s string) (v string, ok bool) {
+	// opens a file that contains single string value,
+	// like /sys/class/infiniband/mlx4_0/ports/1/state
+	// or /sys/fs/lustre/health_check
+	// Not sure it belongs here becaus the module is getnumbers..
+	
+	buf, err := ioutil.ReadFile(s)
+	v = ""
+	ok = true
+	if err != nil {
+		//log.Fatal(err)
+		ok = false
+	}
+	// add a regex to check if the value is single line, that is hasnt '\n's?
+	// for now just trusting it to be a right file
+	v = string(bytes.TrimSpace(buf)) 
+
+	// silently return false if something fails for now!
+	return v, ok
+}
+
 func GetValFiles(statsdir string, valuelist map[string]struct{}) (result map[string]uint64, err error) {
 	// gets a list of values from under path by files named like []valuelist.
 	// the path can have stars for the hash, but better be under same OST/MFS/FIlesystem?
