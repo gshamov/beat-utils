@@ -35,7 +35,8 @@ func DropKVsMatch(pattern string, mm map[string]interface{} ) {
     // drops key-value pairs from map mm if key is not present in the list 
     // the use of this function is to prune unwanted metrics without much thinking
     // making list of keys to iterate over (deletion while iterating looks dangerous)
-        for k := range (mm) {
+        var keys []string
+	for k := range (mm) {
                keys = append (keys, k)
         }
         var match bool
@@ -57,9 +58,9 @@ func DropKVsMatch(pattern string, mm map[string]interface{} ) {
 func ZeroKVs(list []string, mm map[string]interface{} ) {
     // adds zero uint64 values for keys in the list that are not present in the map 
         metrics := List2Set(list)
-        var keys []string
         
-        for _, k := range(metrics) {
+        
+        for k , _ := range(metrics) {
                         if  _, found := mm[k] ; ! found {
                             mm[k] =uint64(0)
                 }
